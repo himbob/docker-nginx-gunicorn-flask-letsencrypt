@@ -24,10 +24,24 @@ services:
     depends_on:
       - application
 
+#  application:
+#    build: ./${APP_FOLDER}
+#    command: gunicorn --bind 0.0.0.0:5000 --workers 3 ${FLASK_APP}:app
+#    environment:
+#      - FLASK_ENV=${FLASK_ENV}
+#    ports:
+#      - 5000:5000
+
+
   application:
-    build: ./${APP_FOLDER}
+    build:
+      context: ./${APP_FOLDER}
+      args:
+        FLASK_APP: ${FLASK_APP}
     command: gunicorn --bind 0.0.0.0:5000 --workers 3 ${FLASK_APP}:app
     environment:
       - FLASK_ENV=${FLASK_ENV}
     ports:
       - 5000:5000
+    volumes:
+      - ./${APP_FOLDER}:/app
