@@ -9,7 +9,11 @@ RUN apk update \
     musl-dev
 
 WORKDIR /opt/app
-
+RUN mkdir -p /opt/app/instance
+#RUN chown -R $USER:$USER /opt/app
+RUN chmod -R a+rwx /opt/app
+RUN chmod -R 777 /opt/app
+RUN chmod -R 777 /opt/app/instance
 # App non-root user
 ENV GROUP=app
 ENV USER=flask
@@ -41,5 +45,6 @@ RUN pip install \
 
 # Copy app to container (with privileges to non-root user)
 COPY --chown=$USER:$GROUP . .
+COPY --chown=$USER:$GROUP . ./
 
 # Gunicorn is run from the docker-compose file
